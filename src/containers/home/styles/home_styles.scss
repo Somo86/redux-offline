@@ -1,0 +1,16 @@
+.box_wrapper {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+  justify-content: space-around;
+  .item {
+    text-align: center;
+    padding: 2%;
+    background-color: azure;
+    width: 25%;
+    font-size: 1.3em;
+    color: white;
+    margin: .2em 0;
+  }
+}

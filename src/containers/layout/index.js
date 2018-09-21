@@ -7,7 +7,10 @@ class Layout extends React.Component {
     render() {
 
         return (
-            <HomeComponent></HomeComponent>
+            <div id="wrapper">
+                <HomeComponent></HomeComponent>
+            </div>
+
         );
     }
 }

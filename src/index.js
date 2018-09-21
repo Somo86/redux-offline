@@ -5,8 +5,8 @@ import store from './store'
 import Layout from './containers/layout'
 
 import registerServiceWorker from './registerServiceWorker';
-import 'sanitize.css/sanitize.css'
-import './css/app.css';
+//import 'sanitize.css/sanitize.css'
+import './scss/main.scss';
 
 
 render(<Provider store={store}>

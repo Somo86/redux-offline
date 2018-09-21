@@ -1,31 +1,37 @@
 import {createStore, applyMiddleware, compose} from 'redux'
-import thunk from 'redux-thunk'
-import rootReducer from './modules'
+import thunk from 'redux-thunk';
+import { offline } from '@redux-offline/redux-offline';
+import { createOfflineMiddleware } from '@redux-offline/redux-offline/lib/middleware';
+import offlineActionTracker from "@redux-offline/redux-offline/lib/offlineActionTracker";
+import defaultConfig from '@redux-offline/redux-offline/lib/defaults';
+import rootReducer from './reducers/mainReducer';
+import mainSaga from './reducers/mainSaga';
+import initialState from './reducers/state';
+import createSagaMiddleware from 'redux-saga';
 
+const offlineConfig = {
+    ...defaultConfig,
+};
 
-const initialState = {};
-const enhancers = [];
+const sagaMiddleware = createSagaMiddleware();
+
 const middleware = [
-    thunk
+    thunk,
+    sagaMiddleware,
+    createOfflineMiddleware({
+        ...offlineConfig,
+        offlineActionTracker: offlineActionTracker.withoutPromises
+    }),
 ];
 
-if (process.env.NODE_ENV === 'development') {
-    const devToolsExtension = window.devToolsExtension
+const createOfflineStore = offline(offlineConfig)(createStore);
 
-    if (typeof devToolsExtension === 'function') {
-        enhancers.push(devToolsExtension())
-    }
-}
-
-const composedEnhancers = compose(
-    applyMiddleware(...middleware),
-    ...enhancers
-);
-
-const store = createStore(
+const store = createOfflineStore(
     rootReducer,
     initialState,
-    composedEnhancers
+    compose(applyMiddleware(...middleware))
 );
 
-export default store
+sagaMiddleware.run(mainSaga);
+
+export default store;
